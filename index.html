@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Document</title>
+  </head>
+
+  <body>
+    <canvas id="canvas" width="1000" height="1000"></canvas>
+
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://unpkg.com/three@0.141.0/build/three.module.js",
+          "GLTFLoader": "https://unpkg.com/three@0.141.0/examples/jsm/loaders/GLTFLoader.js",
+          "OrbitControls": "https://unpkg.com/three@0.141.0/examples/jsm/controls/OrbitControls.js"
+        }
+      }
+    </script>
+
+    <script type="module">
+      import { GLTFLoader } from "GLTFLoader";
+      import * as THREE from "three";
+      import { OrbitControls } from "OrbitControls";
+
+      let scene = new THREE.Scene();
+      let renderer = new THREE.WebGLRenderer({
+        canvas: document.querySelector("#canvas"),
+        antialias: true,
+      });
+
+      renderer.outputEncoding = THREE.sRGBEncoding;
+
+      let camera = new THREE.PerspectiveCamera(30, 1);
+      camera.position.set(0, 0, 5);
+
+      scene.background = new THREE.Color("white");
+      ///    let light = new THREE.DirectionalLight(0xfffffff, 0.54);
+      var hemiLight = new THREE.HemisphereLight(0xffffff, 0xffffff, 0.61);
+
+      hemiLight.position.set(0, 50, 0);
+
+      // Add hemisphere light to scene
+
+      scene.add(hemiLight);
+
+      var dirLight = new THREE.DirectionalLight(0xffffff, 0.54);
+
+      dirLight.position.set(-8, 12, 8);
+
+      dirLight.castShadow = true;
+
+      dirLight.shadow.mapSize = new THREE.Vector2(1024, 1024);
+
+      // Add directional Light to scene
+
+      scene.add(dirLight);
+      // scene.add(light);
+
+      let loader1 = new GLTFLoader();
+      let controls = new OrbitControls(camera, renderer.domElement);
+      // controls.rotateSpeed = 1.0; // 마우스로 카메라를 회전시킬 속도입니다. 기본값(Float)은 1입니다.
+      controls.zoomSpeed = 1.2; // 마우스 휠로 카메라를 줌 시키는 속도 입니다. 기본값(Float)은 1입니다.
+      // controls.panSpeed = 0.8; // 패닝 속도 입니다. 기본값(Float)은 1입니다.
+      //controls.minDistance = 5; // 마우스 휠로 카메라 거리 조작시 최소 값. 기본값(Float)은 0 입니다.
+      //controls.maxDistance = 100; // 마우스 휠로 카메라 거리 조작시 최대 값. 기본값(Float)은 무제한 입니다.
+      let loader2 = new GLTFLoader();
+      let loader3 = new GLTFLoader();
+
+      // const geometry = new THREE.BoxGeometry(1, 1, 1);
+      // const material = new THREE.MeshStandardMaterial({
+      //   color: 0x99999,
+      // });
+      // const cube = new THREE.Mesh(loader2, material);
+      // cube.position.set(10, 10, 10);
+      scene.add(loader2);
+
+      function render(time) {
+        loader2.position.set(10, 10, 10);
+        loader3.position.set(20, 20, 20);
+
+        renderer.render(scene, camera);
+        requestAnimationFrame(render);
+      }
+      requestAnimationFrame(render);
+
+      loader1.load("test2.glb", function (gltf) {
+        scene.add(gltf.scene);
+
+        function animate() {
+          requestAnimationFrame(animate);
+          // gltf.scene.rotation.y += 0.01;
+
+          renderer.render(scene, camera);
+          controls.update();
+        }
+
+        animate();
+      });
+
+      loader2.load("table.glb", function (gltf) {
+        scene.add(gltf.scene);
+
+        function animate() {
+          requestAnimationFrame(animate);
+          // gltf.scene.rotation.y += 0.01;
+
+          renderer.render(scene, camera);
+          controls.update();
+        }
+
+        animate();
+      });
+
+      loader3.load("table.glb", function (gltf) {
+        scene.add(gltf.scene);
+
+        function animate() {
+          requestAnimationFrame(animate);
+          // gltf.scene.rotation.y += 0.01;
+
+          renderer.render(scene, camera);
+          controls.update();
+        }
+
+        animate();
+      });
+    </script>
+  </body>
+</html>
